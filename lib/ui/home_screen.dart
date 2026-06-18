@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/memorized_store.dart';
 import '../data/surah_catalog.dart';
+import '../services/tarteel_launcher.dart';
 import 'edit_memorized_screen.dart';
 import 'widgets/empty_state.dart';
 import 'widgets/section_header.dart';
@@ -19,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final MemorizedStore _store = MemorizedStore();
   final SurahCatalog _catalog = SurahCatalog();
+  final TarteelLauncher _tarteel = TarteelLauncher();
 
   late final Future<void> _loadFuture;
 
@@ -93,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   surah: _catalog.getSurah(n),
                   recited: false,
                   onTap: () => _toggleRecited(n),
+                  onOpenTarteel: () => _tarteel.openSurah(n),
                 ),
               ),
             );
@@ -106,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   surah: _catalog.getSurah(n),
                   recited: true,
                   onTap: () => _toggleRecited(n),
+                  onOpenTarteel: () => _tarteel.openSurah(n),
                 ),
               ),
             );

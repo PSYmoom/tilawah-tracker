@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../data/surah.dart';
 
 /// A single row in the rotation list: the surah's number, name, ayah count,
-/// and a recited indicator. Tapping it toggles the recited state.
+/// a button to open it in Tarteel, and a recited indicator. Tapping the row
+/// toggles the recited state
 class SurahTile extends StatelessWidget {
   final int number;
   final Surah? surah;
   final bool recited;
   final VoidCallback onTap;
+  final VoidCallback onOpenTarteel;
 
   const SurahTile({
     super.key,
@@ -16,6 +18,7 @@ class SurahTile extends StatelessWidget {
     required this.surah,
     required this.recited,
     required this.onTap,
+    required this.onOpenTarteel,
   });
 
   @override
@@ -30,9 +33,19 @@ class SurahTile extends StatelessWidget {
             : null,
       ),
       subtitle: Text('${surah?.ayahCount ?? 0} ayahs'),
-      trailing: Icon(
-        recited ? Icons.check_circle : Icons.radio_button_unchecked,
-        color: recited ? primary : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            tooltip: 'Recite in Tarteel',
+            icon: const Icon(Icons.play_circle_outline),
+            onPressed: onOpenTarteel,
+          ),
+          Icon(
+            recited ? Icons.check_circle : Icons.radio_button_unchecked,
+            color: recited ? primary : null,
+          ),
+        ],
       ),
       onTap: onTap,
     );
