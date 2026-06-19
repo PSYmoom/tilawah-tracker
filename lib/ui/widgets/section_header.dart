@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
-/// A small uppercase heading used to label sections of the rotation list
-/// ("DUE NEXT", "RECITED THIS CYCLE").
+import '../theme.dart';
+
+/// A small uppercase heading labelling a section of the rotation list
 class SectionHeader extends StatelessWidget {
   final String label;
+  final bool muted;
 
-  const SectionHeader(this.label, {super.key});
+  const SectionHeader(this.label, {super.key, this.muted = false});
 
   @override
   Widget build(BuildContext context) {
+    final p = AppPalette.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      padding: const EdgeInsets.fromLTRB(22, 18, 22, 10),
       child: Text(
         label.toUpperCase(),
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
+        style: Theme.of(context)
+            .textTheme
+            .labelMedium
+            ?.copyWith(color: muted ? p.sectionDone : p.sectionDue),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'ui/home_screen.dart';
+import 'ui/theme.dart';
 
 void main() {
   runApp(const TilawahApp());
@@ -14,10 +15,9 @@ class TilawahApp extends StatelessWidget {
     return MaterialApp(
       title: 'TilawahTracker',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1B6B5A)),
-        useMaterial3: true,
-      ),
+      theme: buildAppTheme(Brightness.light),
+      darkTheme: buildAppTheme(Brightness.dark),
+      themeMode: ThemeMode.system,
       home: const HomeScreen(),
     );
   }
