@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:home_widget/home_widget.dart';
 
 import '../data/memorized_store.dart';
 import '../data/surah_catalog.dart';
 import '../services/tarteel_launcher.dart';
+import '../services/widget_service.dart';
 import 'edit_memorized_screen.dart';
 import 'theme.dart';
 import 'widgets/app_header.dart';
@@ -27,16 +31,58 @@ class _HomeScreenState extends State<HomeScreen> {
   final TarteelLauncher _tarteel = TarteelLauncher();
 
   late final Future<void> _loadFuture;
+  StreamSubscription<Uri?>? _widgetClickSub;
+  late final AppLifecycleListener _lifecycle;
 
   @override
   void initState() {
     super.initState();
     _loadFuture = _load();
+    _setupWidgetLaunch();
+    // Re-read the store whenever the app returns to the foreground
+    _lifecycle = AppLifecycleListener(onResume: _reloadFromStore);
+  }
+
+  @override
+  void dispose() {
+    _widgetClickSub?.cancel();
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  Future<void> _reloadFromStore() async {
+    await _store.load();
+    if (mounted) setState(() {});
+  }
+
+  /// Opens the edit screen when the widget's "+" button launches the app
+  Future<void> _setupWidgetLaunch() async {
+    _widgetClickSub = HomeWidget.widgetClicked.listen(_handleWidgetUri);
+    _handleWidgetUri(await HomeWidget.initiallyLaunchedFromHomeWidget());
+  }
+
+  void _handleWidgetUri(Uri? uri) {
+    final host = uri?.host;
+    if (host != 'edit' && host != 'home') return;
+    _loadFuture.then((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final navigator = Navigator.of(context);
+        navigator.popUntil((route) => route.isFirst);
+        if (host == 'edit') _openEditList();
+      });
+    });
   }
 
   Future<void> _load() async {
     await _store.load();
     await _catalog.load();
+    _syncWidget();
+  }
+
+  /// Tell the home-screen widget to re-render (it reads the shared store).
+  void _syncWidget() {
+    WidgetService.refresh();
   }
 
   Future<void> _openEditList() async {
@@ -47,12 +93,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (mounted) setState(() {});
+    _syncWidget();
   }
 
   Future<void> _toggleRecited(int surahNumber) async {
     final cycleCompleted = await _store.toggleRecited(surahNumber);
     if (!mounted) return;
     setState(() {});
+    _syncWidget();
     if (cycleCompleted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

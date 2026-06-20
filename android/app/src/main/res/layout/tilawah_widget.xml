@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_background"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="2dp"
+            android:text="DUE NEXT"
+            android:textColor="@color/widget_header"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.12" />
+
+        <TextView
+            android:id="@+id/widget_plus"
+            android:layout_width="44dp"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:background="@drawable/widget_pill_bg"
+            android:text="+"
+            android:textColor="@color/widget_plus_fg"
+            android:textSize="17sp"
+            android:contentDescription="Add or edit surahs" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Nothing due — open the app to add surahs"
+        android:textColor="@color/widget_muted"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <!-- Surah rows are added at runtime -->
+    <LinearLayout
+        android:id="@+id/rows_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="3dp"
+        android:orientation="vertical" />
+
+</LinearLayout>

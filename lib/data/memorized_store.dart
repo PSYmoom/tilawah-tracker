@@ -16,25 +16,31 @@ class MemorizedStore {
   final SplayTreeSet<int> _memorized = SplayTreeSet<int>();
   final Set<int> _recited = {};
 
-  /// Loads saved data from disk into memory. Call once at startup.
+  /// Loads saved data from disk into memory.
+  ///
+  /// Calls [SharedPreferences.reload] first to pick up changes the native widget
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     _memorized
       ..clear()
-      ..addAll((prefs.getStringList(_memorizedKey) ?? []).map(int.parse));
+      ..addAll(_parseNumbers(prefs.getString(_memorizedKey)));
     _recited
       ..clear()
-      ..addAll((prefs.getStringList(_recitedKey) ?? []).map(int.parse));
+      ..addAll(_parseNumbers(prefs.getString(_recitedKey)));
     // Safety: never keep a "recited" entry that isn't in the memorized list.
     _recited.removeWhere((n) => !_memorized.contains(n));
   }
+
+  /// Parses a comma-joined number string like "1,2,4".
+  Iterable<int> _parseNumbers(String? csv) =>
+      (csv ?? '').split(',').where((s) => s.isNotEmpty).map(int.parse);
 
   bool get isEmpty => _memorized.isEmpty;
 
   bool isMemorized(int surahNumber) => _memorized.contains(surahNumber);
 
   /// Surahs not yet recited this cycle, in surah-number order.
-  /// (Filtering the already-sorted [_memorized] preserves the order — no sort.)
   List<int> get dueNext =>
       _memorized.where((n) => !_recited.contains(n)).toList();
 
@@ -76,13 +82,7 @@ class MemorizedStore {
 
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      _memorizedKey,
-      _memorized.map((n) => n.toString()).toList(),
-    );
-    await prefs.setStringList(
-      _recitedKey,
-      _recited.map((n) => n.toString()).toList(),
-    );
+    await prefs.setString(_memorizedKey, _memorized.join(','));
+    await prefs.setString(_recitedKey, _recited.join(','));
   }
 }

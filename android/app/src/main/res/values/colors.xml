@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget colours — light theme. (Dark overrides live in values-night.) -->
+    <color name="widget_card">#FFFDF8</color>
+    <color name="widget_border">#E2D8C2</color>
+    <color name="widget_header">#9C7430</color>
+    <color name="widget_badge_bg">#163230</color>
+    <color name="widget_badge_border">#70AB8038</color>
+    <color name="widget_badge_text">#F0EAD9</color>
+    <color name="widget_name">#1D2B27</color>
+    <color name="widget_muted">#8C8674</color>
+    <color name="widget_play">#1C5A4A</color>
+    <color name="widget_check">#AB8038</color>
+    <color name="widget_divider">#F0E9DA</color>
+    <color name="widget_plus_bg">#F3ECE0</color>
+    <color name="widget_plus_fg">#9C7430</color>
+    <color name="widget_plus_border">#E7DCC6</color>
+</resources>
