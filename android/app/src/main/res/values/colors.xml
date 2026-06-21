@@ -15,4 +15,5 @@
     <color name="widget_plus_bg">#F3ECE0</color>
     <color name="widget_plus_fg">#9C7430</color>
     <color name="widget_plus_border">#E7DCC6</color>
+	<color name="ic_launcher_background">#163230</color>
 </resources>
